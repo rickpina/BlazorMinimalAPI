@@ -1,0 +1,98 @@
+﻿@using BlazorMinimalAPI.Data_Models
+<h3>Random Data Generation</h3>
+
+
+
+<EditForm Model="Model" OnValidSubmit="GenerateRandomData" FormName="RandomPersonGeneration">
+	<DataAnnotationsValidator />
+	<ValidationSummary />
+
+	<button class="btn btn-success" type="submit">Generate</button>
+
+	<label>
+		Generate First Name:
+		<InputSelect @bind-Value="Model!.FirstName">
+			<option checked="@(Model!.FirstName == "Random")"
+					value="Random">
+				Random
+			</option>
+			<option checked="@(Model!.FirstName == "Starts With:")"
+					value="Starts With:">
+				Starts With:
+			</option>
+
+		</InputSelect>
+	</label>
+
+	<label>
+		Generate Last Name:
+		<InputSelect @bind-Value="Model!.LastName">
+			<option checked="@(Model!.LastName == "Random")"
+					value="Random">
+				Random
+			</option>
+			<option checked="@(Model!.LastName == "Starts With:")"
+					value="Starts With:">
+				Starts With:
+			</option>
+
+		</InputSelect>
+	</label>
+
+	<label>
+		Generate Date Of Birth:
+		<InputSelect @bind-Value="SelectedDateOption">
+			<option checked="@("Random")"
+					value="Random">
+				Random
+			</option>
+
+		</InputSelect>
+	</label>
+
+	<label>
+		Generate SSN:
+		<InputSelect @bind-Value="Model!.SSN">
+			<option checked="@(Model!.SSN == "Random")"
+					value="Random">
+				Random
+			</option>
+
+		</InputSelect>
+	</label>
+
+	<label>
+		Generate Occupation:
+		<InputSelect @bind-Value="Model!.Occupation">
+			<option checked="@(Model!.Occupation == "Random")"
+					value="Random">
+				Random
+			</option>
+			<option checked="@(Model!.Occupation == "Starts With:")"
+					value="Starts With:">
+				Starts With:
+			</option>
+
+		</InputSelect>
+	</label>
+
+
+</EditForm>
+
+
+
+@code {
+	[SupplyParameterFromForm]
+	private Person? Model { get; set; }
+
+	protected override void OnInitialized() =>
+		Model ??= new();
+
+
+	private string SelectedDateOption { get; set; } = "Default";
+
+	private void GenerateRandomData()
+	{
+		Console.WriteLine("Generate");
+	}
+}

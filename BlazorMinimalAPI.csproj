@@ -11,4 +11,10 @@
     <Folder Include="Database Logic\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Include="Static Json Data\FirstNames.json" />
+    <EmbeddedResource Include="Static Json Data\LastNames.json" />
+    <EmbeddedResource Include="Static Json Data\Occupations.json" />
+  </ItemGroup>
+
 </Project>
