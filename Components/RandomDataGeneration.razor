@@ -1,6 +1,8 @@
 ﻿@using BlazorMinimalAPI.Data_Models
 <h3>Random Data Generation</h3>
 
+@inject HttpClient HttpClient
+
 
 
 <EditForm Model="Model" OnValidSubmit="GenerateRandomData" FormName="RandomPersonGeneration">
@@ -11,15 +13,45 @@
 
 	<label>
 		Generate First Name:
+		<InputSelect @bind-Value="Model!.GenerateAmount">
+			<option checked="@(Model!.GenerateAmount == 1)"
+			value="1">
+				1
+			</option>
+			<option checked="@(Model!.GenerateAmount == 10)"
+			value="10">
+				10
+			</option>
+			<option checked="@(Model!.GenerateAmount == 100)"
+			value="100">
+				100
+			</option>
+			<option checked="@(Model!.GenerateAmount == 1000)"
+			value="1000">
+				1000
+			</option>
+			<option checked="@(Model!.GenerateAmount == 10000)"
+			value="10000">
+				10000
+			</option>
+			<option checked="@(Model!.GenerateAmount == 100000)"
+			value="100000">
+				100000
+			</option>
+
+		</InputSelect>
+	</label>
+	<label>
+		Generate First Name:
 		<InputSelect @bind-Value="Model!.FirstName">
 			<option checked="@(Model!.FirstName == "Random")"
-					value="Random">
+			value="Random">
 				Random
 			</option>
-			<option checked="@(Model!.FirstName == "Starts With:")"
+			@* <option checked="@(Model!.FirstName == "Starts With:")"
 					value="Starts With:">
 				Starts With:
-			</option>
+			</option> *@
 
 		</InputSelect>
 	</label>
@@ -28,22 +60,22 @@
 		Generate Last Name:
 		<InputSelect @bind-Value="Model!.LastName">
 			<option checked="@(Model!.LastName == "Random")"
-					value="Random">
+			value="Random">
 				Random
 			</option>
-			<option checked="@(Model!.LastName == "Starts With:")"
+			@* <option checked="@(Model!.LastName == "Starts With:")"
 					value="Starts With:">
 				Starts With:
-			</option>
+			</option> *@
 
 		</InputSelect>
 	</label>
 
 	<label>
 		Generate Date Of Birth:
-		<InputSelect @bind-Value="SelectedDateOption">
-			<option checked="@("Random")"
-					value="Random">
+		<InputSelect @bind-Value="Model!.DateOfBirth">
+			<option checked="@(Model!.DateOfBirth == "Random")"
+			value="Random">
 				Random
 			</option>
 
@@ -54,7 +86,7 @@
 		Generate SSN:
 		<InputSelect @bind-Value="Model!.SSN">
 			<option checked="@(Model!.SSN == "Random")"
-					value="Random">
+			value="Random">
 				Random
 			</option>
 
@@ -65,12 +97,23 @@
 		Generate Occupation:
 		<InputSelect @bind-Value="Model!.Occupation">
 			<option checked="@(Model!.Occupation == "Random")"
-					value="Random">
+			value="Random">
 				Random
 			</option>
-			<option checked="@(Model!.Occupation == "Starts With:")"
+			@* <option checked="@(Model!.Occupation == "Starts With:")"
 					value="Starts With:">
 				Starts With:
+			</option> *@
+
+		</InputSelect>
+	</label>
+
+	<label>
+		Title:
+		<InputSelect @bind-Value="Model!.Title">
+			<option checked="@(Model!.Title == "Random")"
+			value="Random">
+				Random
 			</option>
 
 		</InputSelect>
@@ -83,16 +126,56 @@
 
 @code {
 	[SupplyParameterFromForm]
-	private Person? Model { get; set; }
+	private GeneratePerson? Model { get; set; }
 
 	protected override void OnInitialized() =>
 		Model ??= new();
 
 
-	private string SelectedDateOption { get; set; } = "Default";
 
-	private void GenerateRandomData()
+	private async Task GenerateRandomData()
 	{
-		Console.WriteLine("Generate");
+		if (Model != null)
+		{
+			try
+			{
+				var response = await HttpClient.PostAsJsonAsync("/person/generate", Model);
+
+				if (response.IsSuccessStatusCode)
+				{
+					var generatedPeople = await response.Content.ReadFromJsonAsync<List<Person>>();
+
+
+					Console.WriteLine("Random Data submitted successfully!");
+
+					if (generatedPeople == null)
+						throw new Exception("Result was a success but came back null.");
+
+					foreach (var generatedPerson in generatedPeople)
+					{
+						Console.WriteLine($"First Name: {generatedPerson?.FirstName}");
+						Console.WriteLine($"Last Name: {generatedPerson?.LastName}");
+						Console.WriteLine($"Occupation: {generatedPerson?.Occupation}");
+						Console.WriteLine($"Date of Birth: {generatedPerson?.DateOfBirth.ToShortDateString()}");
+						Console.WriteLine($"SSN: {generatedPerson?.SSN}");
+						Console.WriteLine($"Title: {generatedPerson?.Title}");						
+						Console.WriteLine("-----------------------------");
+					}
+				}
+				else
+				{
+					Console.WriteLine($"Error: {response.StatusCode}");
+				}
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine($"An error occurred: {ex.Message}");
+			}
+		}
+		else
+		{
+			Console.WriteLine("Model is null.");
+		}
+
 	}
 }

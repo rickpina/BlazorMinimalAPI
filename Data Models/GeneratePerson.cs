@@ -2,11 +2,8 @@
 
 namespace BlazorMinimalAPI.Data_Models
 {
-    public class Person
+    public class GeneratePerson
     {
-
-        public int Id { get; set; }
-
         [Display(Name = "First Name")]
         public string? FirstName { get; set; }
 
@@ -14,11 +11,14 @@ namespace BlazorMinimalAPI.Data_Models
         public string? LastName { get; set; }
 
         [Display(Name = "Date of Birth")]
-        public DateTime DateOfBirth { get; set; }
+        public string? DateOfBirth { get; set; }
 
         public string? SSN { get; set; }
 
         public string? Occupation { get; set; }
+
+        [Display(Name = "Amount")]
+        public int GenerateAmount { get; set; }
         public string? Title { get; set; }
     }
 }

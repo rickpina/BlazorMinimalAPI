@@ -1,0 +1,14 @@
+﻿@BlazorMinimalAPI_HostAddress = https://localhost:7181
+
+GET {{BlazorMinimalAPI_HostAddress}}/weatherforecast
+
+###
+
+POST {{BlazorMinimalAPI_HostAddress}}/person/generate
+Content-Type: application/json
+{
+  "Id":"1",
+  "FirstName":"Rick",
+  "LastName":"Pina"
+}
+###
