@@ -21,4 +21,5 @@ namespace BlazorMinimalAPI.Data_Models
         public string? Occupation { get; set; }
         public string? Title { get; set; }
     }
+
 }

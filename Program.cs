@@ -43,6 +43,7 @@ var personBaseURL = app.MapGroup("/person");
 
 
 #region Person API
+
 personBaseURL.MapPost("/generate", async (ApplicationDbContext dbContext, GeneratePerson person, HttpContext httpContext) =>
 {
     var random = new Random();
@@ -80,7 +81,8 @@ personBaseURL.MapPost("/generate", async (ApplicationDbContext dbContext, Genera
     return Results.Ok(personList);
 });
 
-
+personBaseURL.MapGet("", async (ApplicationDbContext db) =>
+    await db.People.ToListAsync());
 
 #endregion 
 

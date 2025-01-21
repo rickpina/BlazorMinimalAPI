@@ -6,12 +6,12 @@
         {
             "James", "Mary", "Robert", "Patricia", "John", "Jennifer", "Michael",
             "Linda", "William", "Elizabeth", "David", "Barbara", "Richard", "Susan",
-            "Joseph", "Jessica", "Thomas", "Sarah", "Charles", "Karen", "Rick",
+            "Joseph", "Jessica", "Thomas", "Sarah", "Charles", "Karen", "Rick", "Taylor",
             "Aeliana", "Thalion", "Lirael", "Kaelen", "Elowen", "Galadriel", "Eldrin",
             "Fendris", "Ysolde", "Galen", "Seraphine", "Alistair", "Elysia", "Kaelen",
             "Zarael", "Raelen", "Ilyana", "Aric", "Thalindra", "Darien", "Vaelen",
             "Astra", "Sorin", "Nymeria", "Cairn", "Emberlyn", "Valdir", "Isolde",
-            "Fenris", "Alaric", "Solara", "Eldric", "Malin", "Lorien", "Tavira"
+            "Fenris", "Alaric", "Solara", "Eldric", "Malin", "Lorien", "Tavira", 
         };
 
         public static readonly List<string> LastNames = new()
