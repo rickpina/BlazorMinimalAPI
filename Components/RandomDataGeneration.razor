@@ -1,111 +1,70 @@
 ﻿@using BlazorMinimalAPI.Data_Models
-<h3>Random Data Generation</h3>
+
 
 @inject HttpClient HttpClient
 
+<h1 class="mb-4 text-left">Random Data Generation</h1>
 
+<EditForm Model="Model" OnValidSubmit="GenerateRandomData" FormName="RandomPersonGeneration" class="p-4 border rounded shadow-sm bg-light">
+    <DataAnnotationsValidator />
+    <ValidationSummary class="alert alert-danger" />
 
-<EditForm Model="Model" OnValidSubmit="GenerateRandomData" FormName="RandomPersonGeneration">
-	<DataAnnotationsValidator />
-	<ValidationSummary />
+    <div class="mb-3">
+        <label class="form-label fw-bold">Generate Amount:</label>
+        <InputSelect @bind-Value="Model!.GenerateAmount" class="form-select">
+            @foreach (var amount in new[] { 1, 10, 100, 1000, 10000 })
+            {
+                <option value="@amount">@amount</option>
+            }
+        </InputSelect>
+    </div>
 
-	<button class="btn btn-success" type="submit">Generate</button>
+    <div class="mb-3">
+        <label class="form-label fw-bold">Generate First Name:</label>
+        <InputSelect @bind-Value="Model!.FirstName" class="form-select">
+            <option value="Random">Random</option>
+        </InputSelect>
+    </div>
 
-	<label>
-		Generate First Name:
-		<InputSelect @bind-Value="Model!.GenerateAmount">
-			<option checked="@(Model!.GenerateAmount == 1)"
-			value="1">
-				1
-			</option>
-			<option checked="@(Model!.GenerateAmount == 10)"
-			value="10">
-				10
-			</option>
-			<option checked="@(Model!.GenerateAmount == 100)"
-			value="100">
-				100
-			</option>
-			<option checked="@(Model!.GenerateAmount == 1000)"
-			value="1000">
-				1000
-			</option>
-			<option checked="@(Model!.GenerateAmount == 10000)"
-			value="10000">
-				10000
-			</option>
-			
+    <div class="mb-3">
+        <label class="form-label fw-bold">Generate Last Name:</label>
+        <InputSelect @bind-Value="Model!.LastName" class="form-select">
+            <option value="Random">Random</option>
+        </InputSelect>
+    </div>
 
-		</InputSelect>
-	</label>
-	<label>
-		Generate First Name:
-		<InputSelect @bind-Value="Model!.FirstName">
-			<option checked="@(Model!.FirstName == "Random")"
-			value="Random">
-				Random
-			</option>
-		</InputSelect>
-	</label>
+    <div class="mb-3">
+        <label class="form-label fw-bold">Generate Date of Birth:</label>
+        <InputSelect @bind-Value="Model!.DateOfBirth" class="form-select">
+            <option value="Random">Random</option>
+        </InputSelect>
+    </div>
 
-	<label>
-		Generate Last Name:
-		<InputSelect @bind-Value="Model!.LastName">
-			<option checked="@(Model!.LastName == "Random")"
-			value="Random">
-				Random
-			</option>
+    <div class="mb-3">
+        <label class="form-label fw-bold">Generate SSN:</label>
+        <InputSelect @bind-Value="Model!.SSN" class="form-select">
+            <option value="Random">Random</option>
+        </InputSelect>
+    </div>
 
-		</InputSelect>
-	</label>
+    <div class="mb-3">
+        <label class="form-label fw-bold">Generate Occupation:</label>
+        <InputSelect @bind-Value="Model!.Occupation" class="form-select">
+            <option value="Random">Random</option>
+        </InputSelect>
+    </div>
 
-	<label>
-		Generate Date Of Birth:
-		<InputSelect @bind-Value="Model!.DateOfBirth">
-			<option checked="@(Model!.DateOfBirth == "Random")"
-			value="Random">
-				Random
-			</option>
+    <div class="mb-3">
+        <label class="form-label fw-bold">Title:</label>
+        <InputSelect @bind-Value="Model!.Title" class="form-select">
+            <option value="Random">Random</option>
+        </InputSelect>
+    </div>
 
-		</InputSelect>
-	</label>
-
-	<label>
-		Generate SSN:
-		<InputSelect @bind-Value="Model!.SSN">
-			<option checked="@(Model!.SSN == "Random")"
-			value="Random">
-				Random
-			</option>
-
-		</InputSelect>
-	</label>
-
-	<label>
-		Generate Occupation:
-		<InputSelect @bind-Value="Model!.Occupation">
-			<option checked="@(Model!.Occupation == "Random")"
-			value="Random">
-				Random
-			</option>
-
-		</InputSelect>
-	</label>
-
-	<label>
-		Title:
-		<InputSelect @bind-Value="Model!.Title">
-			<option checked="@(Model!.Title == "Random")"
-			value="Random">
-				Random
-			</option>
-
-		</InputSelect>
-	</label>
-
-
+    <div class="d-flex justify-content-end">
+        <button class="btn btn-success px-4" type="submit">Generate</button>
+    </div>
 </EditForm>
-
 
 
 @code {
@@ -135,16 +94,6 @@
 					if (generatedPeople == null)
 						throw new Exception("Result was a success but came back null.");
 
-					foreach (var generatedPerson in generatedPeople)
-					{
-						Console.WriteLine($"First Name: {generatedPerson?.FirstName}");
-						Console.WriteLine($"Last Name: {generatedPerson?.LastName}");
-						Console.WriteLine($"Occupation: {generatedPerson?.Occupation}");
-						Console.WriteLine($"Date of Birth: {generatedPerson?.DateOfBirth.ToShortDateString()}");
-						Console.WriteLine($"SSN: {generatedPerson?.SSN}");
-						Console.WriteLine($"Title: {generatedPerson?.Title}");						
-						Console.WriteLine("-----------------------------");
-					}
 				}
 				else
 				{

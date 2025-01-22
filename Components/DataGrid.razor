@@ -7,55 +7,47 @@
 
 <PageTitle>Data Grid</PageTitle>
 
-<h1>People Grid</h1>
+<h1 class="mb-4 text-left">People Grid</h1>
 
 @if (people == null)
 {
-    <p><em>Loading...</em></p>
+    <div class="d-flex justify-content-center align-items-center my-5">
+        <p><em>Loading...</em></p>
+    </div>
 }
 else
 {
-    <QuickGrid Items="people" Pagination="@pagination">
-        <PropertyColumn Property="@(p => p.Id)" Sortable="true" />
-        <PropertyColumn Property="@(p => p.FirstName)" Sortable="true" />
-        <PropertyColumn Property="@(p => p.LastName)" Sortable="true" />
-        <PropertyColumn Property="@(p => p.Title)" Sortable="true" />
-        <PropertyColumn Property="@(p => p.DateOfBirth)" Format="yyyy-MM-dd" Sortable="true" />
-        <PropertyColumn Property="@(p => p.Occupation)" Sortable="true" />
-        <PropertyColumn Property="@(p => p.SSN)" Sortable="true" />
-    </QuickGrid>
+    <div class="table-responsive border rounded shadow-sm p-3 bg-light">
+        <QuickGrid Items="people" Pagination="@pagination" Class="table table-striped table-hover">
+            <PropertyColumn Property="@(p => p.Id)" Title="ID" Sortable="true" />
+            <PropertyColumn Property="@(p => p.FirstName)" Title="First Name" Sortable="true" />
+            <PropertyColumn Property="@(p => p.LastName)" Title="Last Name" Sortable="true" />
+            <PropertyColumn Property="@(p => p.Title)" Title="Title" Sortable="true" />
+            <PropertyColumn Property="@(p => p.DateOfBirth)" Title="Date of Birth" Format="yyyy-MM-dd" Sortable="true" />
+            <PropertyColumn Property="@(p => p.Occupation)" Title="Occupation" Sortable="true" />
+            <PropertyColumn Property="@(p => p.SSN)" Title="SSN" Sortable="true" />
+        </QuickGrid>
+    </div>
 
-    <Paginator State="@pagination" />
+    <div class="d-flex justify-content-center mt-4">
+        <Paginator State="@pagination" />
+    </div>
 }
 
 
 @code {
-    //private record Person(int PersonId, string Name, DateOnly PromotionDate);
-    PaginationState pagination = new PaginationState { ItemsPerPage = 100 };
+    
+    PaginationState pagination = new PaginationState { ItemsPerPage = 50 };
     private IQueryable<Person> people;
-
-    // {
-    //     new Person(10895, "Jean Martin", new DateOnly(1985, 3, 16)),
-    //     new Person(10944, "António Langa", new DateOnly(1991, 12, 1)),
-    //     new Person(11203, "Julie Smith", new DateOnly(1958, 10, 10)),
-    //     new Person(11205, "Nur Sari", new DateOnly(1922, 4, 27)),
-    //     new Person(11898, "Jose Hernandez", new DateOnly(2011, 5, 3)),
-    //     new Person(12130, "Kenji Sato", new DateOnly(2004, 1, 9)),
-    // }.AsQueryable();
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
             var response = await HttpClient.GetFromJsonAsync<List<Person>>("/person");
-
-
             if(response != null)
             {
-                Console.WriteLine("Got a response back.");
-                Console.WriteLine(response.Count);
                 people = response.AsQueryable<Person>();
-
             }
         }
         catch(Exception ex)

@@ -54,29 +54,26 @@ personBaseURL.MapPost("/generate", async (ApplicationDbContext dbContext, Genera
         var generatedPerson = new Person
         {
             FirstName = person.FirstName == "Random"
-            ? RandomData.FirstNames[random.Next(RandomData.FirstNames.Count)]
-            : person.FirstName,
+                ? RandomData.FirstNames[random.Next(RandomData.FirstNames.Count)]
+                : person.FirstName,
             LastName = person.LastName == "Random"
-            ? RandomData.LastNames[random.Next(RandomData.LastNames.Count)]
-            : person.LastName,
+                ? RandomData.LastNames[random.Next(RandomData.LastNames.Count)]
+                : person.LastName,
             Occupation = person.Occupation == "Random"
-            ? RandomData.Occupations[random.Next(RandomData.Occupations.Count)]
-            : person.Occupation,
-
+                ? RandomData.Occupations[random.Next(RandomData.Occupations.Count)]
+                : person.Occupation,
             DateOfBirth = RandomData.GenerateRandomDateOfBirth(),
             SSN = RandomData.GenerateFakeSSN(),
-
             Title = person.Title == "Random"
-            ? RandomData.Titles[random.Next(RandomData.Titles.Count)]
-            : person.Title,
+                ? RandomData.Titles[random.Next(RandomData.Titles.Count)]
+                : person.Title,
         };
 
-        dbContext.People.Add(generatedPerson);
-        await dbContext.SaveChangesAsync();
         personList.Add(generatedPerson);
-        
     }
-    
+
+    await dbContext.People.AddRangeAsync(personList);
+    await dbContext.SaveChangesAsync();
 
     return Results.Ok(personList);
 });
