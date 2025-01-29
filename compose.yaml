@@ -1,0 +1,40 @@
+
+networks:
+  app_network:
+    driver: bridge
+
+services:
+  db:
+    image: rickpina/my-sql-image:latest
+    container_name: sql_container
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=GoodPassword123!
+    ports:
+      - "11433:1433"   
+    networks:
+      - app_network
+    healthcheck:
+      test: ["CMD", "pgrep", "sqlservr"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  webapi:
+    image: rickpina/blazorminimalapi:v4 
+    container_name: blazor_webapi
+    environment:
+        - ASPNETCORE_URLS=http://+:8080
+        - API_BASE_URL=http://webapi:8080/
+        - RawConnection=Server=db;Database=BlazorMinimalAPIDB;User Id=sa;Password=GoodPassword123!;Encrypt=True;TrustServerCertificate=True;
+
+    ports:
+      - "7181:8080"  
+    depends_on:
+       db:
+         condition: service_healthy      
+    networks:
+      - app_network
+
+

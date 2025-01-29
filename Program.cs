@@ -1,6 +1,7 @@
 using BlazorMinimalAPI.Components;
 using BlazorMinimalAPI.Data_Models;
 using BlazorMinimalAPI.Database_Logic;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using System.Text.Json;
 
@@ -10,12 +11,28 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
-builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri("https://localhost:7181/") } );
+Console.WriteLine("Web Api's Base URL");
+Console.WriteLine(builder.Configuration["API_BASE_URL"]);
+Console.WriteLine("Container Database Connection String");
+Console.WriteLine(builder.Configuration["RawConnection"]);
 
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+var apiBaseUrl = builder.Configuration["API_BASE_URL"] ?? "https://localhost:7181/";
 
+builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(apiBaseUrl) });
 
+try
+{
+    string connectionstring = builder.Configuration["RawConnection"] 
+        ?? builder.Configuration.GetConnectionString("LocalConnection") 
+        ?? throw new Exception("Connection String is null!");
+
+    builder.Services.AddDbContext<ApplicationDbContext>(options =>
+       options.UseSqlServer(connectionstring));
+}
+catch (Exception ex)
+{
+    Console.WriteLine(ex.ToString());
+}
 
 
 var app = builder.Build();
@@ -77,6 +94,7 @@ personBaseURL.MapPost("/generate", async (ApplicationDbContext dbContext, Genera
 
     return Results.Ok(personList);
 });
+
 
 personBaseURL.MapGet("", async (ApplicationDbContext db) =>
     await db.People.ToListAsync());

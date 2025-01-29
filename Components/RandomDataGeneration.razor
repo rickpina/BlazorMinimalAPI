@@ -97,13 +97,13 @@
 				}
 				else
 				{
-					Console.WriteLine($"Error: {response.StatusCode}");
+                    throw new Exception($"Error: {response.StatusCode}");
 				}
 			}
 			catch (Exception ex)
 			{
-				Console.WriteLine($"An error occurred: {ex.Message}");
-			}
+                Console.WriteLine($"There was an error generating data. {ex.Message} {ex.StackTrace}");
+            }
 		}
 		else
 		{
