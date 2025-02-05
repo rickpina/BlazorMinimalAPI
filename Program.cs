@@ -16,9 +16,12 @@ Console.WriteLine(builder.Configuration["API_BASE_URL"]);
 Console.WriteLine("Container Database Connection String");
 Console.WriteLine(builder.Configuration["RawConnection"]);
 
+builder.Configuration.AddUserSecrets<Program>();
+
 var apiBaseUrl = builder.Configuration["API_BASE_URL"] ?? "https://localhost:7181/";
 
 builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(apiBaseUrl) });
+
 
 try
 {
